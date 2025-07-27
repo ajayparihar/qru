@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>QRU</title>
+    <link rel="stylesheet" href="styles.css?v=0.1">
+    <meta name="description" content="QRU - Fast, free QR code generator with pure black and white design for text, URLs, and WiFi credentials">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: dark)">
+    <meta name="author" content="Bheb Developer">
+    <meta name="keywords" content="QR code, generator, text to QR, URL to QR, WiFi QR code">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="QRU">
+    <meta name="application-name" content="QRU">
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon/icon.png">
+    <link rel="icon" href="icon/icon.png" type="image/png">
+</head>
+<body>
+    <!-- Skip link for keyboard users -->
+    <a href="#main" class="skip-link">Skip to content</a>
+    
+    <!-- Status region for accessibility -->
+    <div id="status-region" class="sr-only" role="status" aria-live="polite"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="title">
+                <a href="." aria-label="Refresh QRU">QRU</a>
+            </h1>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main" class="main">
+        <div class="container">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="input-card">
+                    <h2 class="section-title">Enter Content</h2>
+                    <div class="input-wrapper">
+                        <label for="contentInput" class="sr-only">Enter text, URL, or contact information</label>
+                        <textarea 
+                            id="contentInput" 
+                            placeholder="Enter text, URL, or contact information..."
+                            class="content-input"
+                            aria-describedby="input-hint char-count"
+                            maxlength="2048"
+                            autocomplete="off"
+                            spellcheck="true"
+                        ></textarea>
+                        <button id="clearBtn" class="clear-btn" aria-label="Paste from clipboard" title="Paste from clipboard">
+                            <!-- Paste Icon -->
+                            <svg class="paste-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                                <path d="M15 2H9a1 1 0 0 0-1 1v2h8V3a1 1 0 0 0-1-1z"></path>
+                                <path d="M9 11h6"></path>
+                                <path d="M12 8v6"></path>
+                            </svg>
+                            <!-- Clear/Delete Icon -->
+                            <svg class="clear-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;" aria-hidden="true">
+                                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="input-hint" class="input-hint">Supports text, URLs, email addresses, phone numbers, and WiFi credentials</p>
+                    <div class="input-stats">
+                        <span id="char-count" class="char-count" role="status" aria-live="polite">0/2048</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR Code Section -->
+            <section class="qr-section">
+                <div class="qr-card">
+                    <h2 class="section-title">QR Code</h2>
+                    <div class="qr-display" role="region" aria-live="polite">
+                        <div class="qr-placeholder" id="qrPlaceholder">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                                <path d="M9 9h6v6H9z"></path>
+                                <path d="M9 3v6"></path>
+                                <path d="M15 3v6"></path>
+                                <path d="M9 21v-6"></path>
+                                <path d="M15 21v-6"></path>
+                            </svg>
+                            <p>Enter content to generate QR code</p>
+                        </div>
+                        <img id="qrImage" class="qr-image" alt="Generated QR code" style="display: none;">
+                        <div id="qrLoading" class="qr-loading" style="display: none;" aria-hidden="true">
+                            <div class="loading-spinner" role="progressbar" aria-label="Generating QR code"></div>
+                            <p>Generating QR code...</p>
+                        </div>
+                    </div>
+                    <div class="qr-actions">
+                        <button class="download-btn primary-cta" id="downloadBtn" disabled title="Download QR code as PNG image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7,10 12,15 17,10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download PNG
+                        </button>
+                        <div class="secondary-actions">
+                            <button class="copy-btn" id="copyBtn" disabled aria-label="Copy QR code to clipboard" title="Copy QR code to clipboard">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                Copy
+                            </button>
+                            <button class="share-btn" id="shareBtn" disabled aria-label="Share QR code" title="Share QR code">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Mobile bottom bar for small screens -->
+    <div class="mobile-bottom-bar" role="toolbar" aria-label="Mobile actions">
+        <button class="mobile-download-btn" id="mobileDownloadBtn" disabled title="Download QR code">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7,10 12,15 17,10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+        </button>
+    </div>
+
+    <script src="script.js?v=0.1"></script>
+    <!-- Removed localStorage clearing script as it conflicts with the app's functionality to save text -->
+    <script>
+        // Register service worker for better performance if supported
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => {
+                    console.log('Service worker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
