@@ -91,17 +91,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Initialize theme based on user preference
+ * Initialize theme based on system preference
  */
 function initializeTheme() {
-  const savedTheme = localStorage.getItem('theme');
   const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
   
-  // Apply theme based on saved preference or system preference
-  if (savedTheme === 'dark' || (savedTheme === null && prefersDarkScheme)) {
+  // Apply theme based on system preference
+  if (prefersDarkScheme) {
     document.documentElement.classList.add('dark-theme');
     document.body.classList.add('dark-theme');
-  } else if (savedTheme === 'light') {
+  } else {
     document.documentElement.classList.remove('dark-theme');
     document.body.classList.remove('dark-theme');
   }
@@ -256,9 +255,6 @@ function toggleTheme() {
     document.body.classList.remove('dark-theme');
   }
   
-  // Save theme preference
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  
   // Remove transition class after animation completes
   setTimeout(() => html.classList.remove('theme-transition'), 300);
   
@@ -282,32 +278,19 @@ function announceStatus(message) {
 }
 
 /**
- * Load saved text from localStorage
+ * Load saved text function (removed localStorage functionality)
  */
 function loadSavedText() {
-  const savedText = localStorage.getItem('text');
-  const contentInput = document.getElementById('contentInput');
-  
-  if (savedText && contentInput) {
-    contentInput.value = savedText;
-    updateCharCount();
-  }
+  // Local storage functionality removed
+  return;
 }
 
 /**
- * Save text to localStorage
+ * Save text function (removed localStorage functionality)
  */
 function saveTextToStorage() {
-  const contentInput = document.getElementById('contentInput');
-  if (!contentInput) return;
-  
-  const text = contentInput.value;
-  
-  if (text) {
-    localStorage.setItem('text', text);
-  } else {
-    localStorage.removeItem('text');
-  }
+  // Local storage functionality removed
+  return;
 }
 
 /**
@@ -316,9 +299,6 @@ function saveTextToStorage() {
 function resetContent() {
   const contentInput = document.getElementById('contentInput');
   if (!contentInput) return;
-  
-  // Clear localStorage
-  localStorage.removeItem('text');
   
   // Clear input and focus
   contentInput.value = '';
